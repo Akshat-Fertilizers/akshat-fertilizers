@@ -24,6 +24,8 @@
     .search::before { content:"⌕"; position:absolute; left:15px; top:7px; font-size:1.45rem; color:var(--leaf); }
     input { width:100%; border:1px solid var(--line); outline:none; padding:13px 14px 13px 43px; border-radius:12px; font:inherit; color:var(--ink); background:#fbfdf9; }
     input:focus { border-color:var(--leaf); box-shadow:0 0 0 3px rgba(40,120,72,.13); }
+    select { width:min(280px,100%); border:1px solid var(--line); outline:none; padding:13px 38px 13px 14px; border-radius:12px; font:inherit; color:var(--ink); background:#fbfdf9; cursor:pointer; }
+    select:focus { border-color:var(--leaf); box-shadow:0 0 0 3px rgba(40,120,72,.13); }
     .count { white-space:nowrap; color:var(--muted); font-size:.9rem; }
     .intro { display:flex; align-items:end; justify-content:space-between; gap:22px; padding:42px 2px 18px; }
     h2 { margin:0; font-size:clamp(1.55rem,3vw,2.3rem); letter-spacing:-.04em; }
@@ -44,7 +46,7 @@
     #qrcode img, #qrcode canvas { width:116px !important; height:116px !important; }
     .qr-section h2 { margin:0 0 5px; }.qr-section p { margin:0; color:#d4e6d7; }.qr-section a { color:#d0ed7e; }
     footer { padding:25px 22px 38px; color:#607469; text-align:center; font-size:.85rem; }
-    @media (max-width:720px) { .hero{padding-top:28px}.site-link{font-size:.8rem}.brand{align-items:flex-start}.toolbar,.qr-section{align-items:stretch;flex-direction:column}.intro{align-items:start;flex-direction:column;padding-top:32px}.grid{grid-template-columns:1fr}article{padding:19px}.details div{gap:10px}dd{max-width:45%} }
+    @media (max-width:720px) { .hero{padding-top:28px}.site-link{font-size:.8rem}.brand{align-items:flex-start}.toolbar,.qr-section{align-items:stretch;flex-direction:column}.intro{align-items:start;flex-direction:column;padding-top:32px}.grid{grid-template-columns:1fr}article{padding:19px}.details div{gap:10px}dd{max-width:45%}select{width:100%} }
   </style>
 </head>
 <body>
@@ -54,7 +56,7 @@
     <p>Explore the product details, composition, recommended crops and application doses shared on the product labels.</p>
   </div></header>
   <main><div class="wrap">
-    <section class="toolbar" aria-label="Catalogue search"><div class="search"><input id="search" type="search" placeholder="Search product, crop, ingredient or dose" autocomplete="off" aria-label="Search products"></div><div class="count" id="count"></div></section>
+    <section class="toolbar" aria-label="Catalogue search"><div class="search"><input id="search" type="search" placeholder="Search product, crop, ingredient or dose" autocomplete="off" aria-label="Search products"></div><select id="productSelect" aria-label="Choose a product"><option value="">All products</option></select><div class="count" id="count"></div></section>
     <div class="intro"><h2>Products in this catalogue</h2><p>Details are transcribed from the supplied product labels. Always follow the instructions on the pack before application.</p></div>
     <section class="grid" id="products"></section>
     <section class="qr-section"><div id="qrcode" aria-label="QR code for Akshat Fertilizer website"></div><div><h2>Scan to visit Akshat Fertilizer</h2><p>Open <a href="https://www.akshatfertilizer.com" target="_blank" rel="noopener">www.akshatfertilizer.com</a> on your phone for more information.</p></div></section>
@@ -70,15 +72,17 @@
       {name:'Humates and Fulvates 22% (Liquid)', type:'Humic acid & fulvic acid derivatives', notice:'S.O. 3922(E) · 12-09-24', composition:[['Total water-soluble humates and fulvates percent, weight by volume, minimum','22'],['pH (1:5% aqueous solution)','9.0 (min)'],['Specific gravity','1.05']], crop:'Ground nut', dose:'Two soil applications at 1.25 L/ha'},
       {name:'Sea Weed Extract — Ascophyllum Nodosum 15% (Liquid)', type:'Bio Stimulant', notice:'S.O. 3922(E) · 12-09-24', composition:[['Alginic acid percent by weight, minimum','1.5'],['Mannitol percent by weight, minimum','1.0'],['pH (10% aqueous solution)','7 ± 1.0'],['Specific gravity','1.0–1.1'],['Total organic carbon percent by weight, minimum','5']], crop:'Green gram', dose:'Two foliar applications at 2.5 Ltr/ha'}
     ];
-    const cards = document.getElementById('products'), search = document.getElementById('search'), count = document.getElementById('count');
+    const cards = document.getElementById('products'), search = document.getElementById('search'), productSelect = document.getElementById('productSelect'), count = document.getElementById('count');
     const esc = value => String(value).replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
+    productSelect.insertAdjacentHTML('beforeend', products.map((product, index) => `<option value="${index}">${esc(product.name)}</option>`).join(''));
     function render() {
       const term = search.value.trim().toLowerCase();
-      const matched = products.filter(p => JSON.stringify(p).toLowerCase().includes(term));
+      const selected = productSelect.value;
+      const matched = products.filter((p, index) => (selected === '' || Number(selected) === index) && JSON.stringify(p).toLowerCase().includes(term));
       count.textContent = `${matched.length} of ${products.length} products`;
       cards.innerHTML = matched.length ? matched.map(p => `<article><div class="tag">${esc(p.type)}</div><h3>${esc(p.name)}</h3><p class="notification">Gazette notification: ${esc(p.notice)}</p><dl class="details">${p.composition.map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl><p class="use"><strong>Recommended crop</strong>${esc(p.crop)}</p><p class="use"><strong>Application dose</strong>${esc(p.dose)}</p></article>`).join('') : '<div class="empty">No product matches that search. Try a crop, ingredient or product name.</div>';
     }
-    search.addEventListener('input', render); render();
+    search.addEventListener('input', render); productSelect.addEventListener('change', render); render();
     new QRCode(document.getElementById('qrcode'), { text:'https://www.akshatfertilizer.com', width:116, height:116, colorDark:'#12352a', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.H });
   </script>
 </body>
