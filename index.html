@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Akshat Fertilizer product information catalogue.">
+  <title>Akshat Fertilizer | Product Catalogue</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <style>
+    :root { --ink:#12352a; --leaf:#287848; --lime:#9acb3c; --cream:#f7f4e9; --paper:#fffefa; --muted:#62746c; --line:#dbe5d7; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); font:16px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background:linear-gradient(145deg,#edf4e6 0%,#f7f4e9 45%,#eef6ed 100%); }
+    .hero { color:white; padding:44px 22px 84px; background:radial-gradient(circle at 85% 15%,rgba(164,209,69,.42),transparent 27%),linear-gradient(130deg,#0e392c,#1d6640 63%,#3d8b43); }
+    .wrap { width:min(1120px,100%); margin:auto; }
+    .brand { display:flex; justify-content:space-between; gap:18px; align-items:center; }
+    .brand-name { font-weight:850; font-size:clamp(1.25rem,3vw,1.85rem); letter-spacing:.02em; }
+    .brand-name span { color:#c8eb73; }
+    .site-link { color:white; font-weight:650; text-decoration:none; border-bottom:1px solid #c8eb73; }
+    h1 { margin:56px 0 10px; max-width:760px; font-size:clamp(2.25rem,6vw,4.8rem); line-height:1.02; letter-spacing:-.055em; }
+    .hero p { max-width:610px; margin:0; color:#deeedf; font-size:1.08rem; }
+    main { margin-top:-42px; padding:0 22px 64px; }
+    .toolbar { padding:18px; display:flex; align-items:center; gap:18px; border:1px solid rgba(255,255,255,.75); border-radius:20px; background:rgba(255,255,255,.95); box-shadow:0 16px 36px rgba(16,56,38,.13); }
+    .search { flex:1; min-width:0; position:relative; }
+    .search::before { content:"⌕"; position:absolute; left:15px; top:7px; font-size:1.45rem; color:var(--leaf); }
+    input { width:100%; border:1px solid var(--line); outline:none; padding:13px 14px 13px 43px; border-radius:12px; font:inherit; color:var(--ink); background:#fbfdf9; }
+    input:focus { border-color:var(--leaf); box-shadow:0 0 0 3px rgba(40,120,72,.13); }
+    .count { white-space:nowrap; color:var(--muted); font-size:.9rem; }
+    .intro { display:flex; align-items:end; justify-content:space-between; gap:22px; padding:42px 2px 18px; }
+    h2 { margin:0; font-size:clamp(1.55rem,3vw,2.3rem); letter-spacing:-.04em; }
+    .intro p { margin:0; max-width:510px; color:var(--muted); }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+    article { display:flex; flex-direction:column; padding:24px; border:1px solid var(--line); border-radius:19px; background:var(--paper); box-shadow:0 8px 22px rgba(23,65,40,.06); }
+    .tag { width:max-content; margin-bottom:12px; padding:4px 10px; border-radius:100px; color:#1e633e; background:#e4f0cf; font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
+    h3 { margin:0 0 7px; font-size:1.25rem; line-height:1.2; letter-spacing:-.025em; }
+    .notification { margin:0 0 17px; color:var(--muted); font-size:.87rem; }
+    .details { margin:0; border-top:1px solid var(--line); }
+    .details div { display:grid; grid-template-columns:1fr auto; gap:16px; padding:10px 0; border-bottom:1px solid var(--line); }
+    dt { color:#345648; } dd { margin:0; text-align:right; font-weight:750; color:#153e2c; }
+    .use { margin:17px 0 0; padding:13px 14px; border-radius:12px; background:#f0f6e9; font-size:.92rem; }
+    .use strong { display:block; margin-bottom:2px; color:#1c603b; font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; }
+    .empty { grid-column:1/-1; padding:45px; text-align:center; color:var(--muted); border:1px dashed #b9cbb9; border-radius:18px; }
+    .qr-section { display:flex; align-items:center; gap:24px; margin-top:42px; padding:26px; border-radius:20px; color:white; background:#133e2e; }
+    #qrcode { flex:none; padding:8px; border-radius:10px; background:white; line-height:0; }
+    #qrcode img, #qrcode canvas { width:116px !important; height:116px !important; }
+    .qr-section h2 { margin:0 0 5px; }.qr-section p { margin:0; color:#d4e6d7; }.qr-section a { color:#d0ed7e; }
+    footer { padding:25px 22px 38px; color:#607469; text-align:center; font-size:.85rem; }
+    @media (max-width:720px) { .hero{padding-top:28px}.site-link{font-size:.8rem}.brand{align-items:flex-start}.toolbar,.qr-section{align-items:stretch;flex-direction:column}.intro{align-items:start;flex-direction:column;padding-top:32px}.grid{grid-template-columns:1fr}article{padding:19px}.details div{gap:10px}dd{max-width:45%} }
+  </style>
+</head>
+<body>
+  <header class="hero"><div class="wrap">
+    <div class="brand"><div class="brand-name">AKSHAT <span>FERTILIZER</span></div><a class="site-link" href="https://www.akshatfertilizer.com" target="_blank" rel="noopener">akshatfertilizer.com ↗</a></div>
+    <h1>Product information, made clear.</h1>
+    <p>Explore the product details, composition, recommended crops and application doses shared on the product labels.</p>
+  </div></header>
+  <main><div class="wrap">
+    <section class="toolbar" aria-label="Catalogue search"><div class="search"><input id="search" type="search" placeholder="Search product, crop, ingredient or dose" autocomplete="off" aria-label="Search products"></div><div class="count" id="count"></div></section>
+    <div class="intro"><h2>Products in this catalogue</h2><p>Details are transcribed from the supplied product labels. Always follow the instructions on the pack before application.</p></div>
+    <section class="grid" id="products"></section>
+    <section class="qr-section"><div id="qrcode" aria-label="QR code for Akshat Fertilizer website"></div><div><h2>Scan to visit Akshat Fertilizer</h2><p>Open <a href="https://www.akshatfertilizer.com" target="_blank" rel="noopener">www.akshatfertilizer.com</a> on your phone for more information.</p></div></section>
+  </div></main>
+  <footer>© Akshat Fertilizer · Product catalogue</footer>
+  <script>
+    const products = [
+      {name:'Mixture of Botanical Extract and Seaweed Extract (Liquid)', type:'Bio Stimulant', notice:'S.O. 2346(E) · 26-05-25', composition:[['Musa acuminate pseudostem, per cent by weight, minimum','75'],['Sargassum tenerrimum, per cent by weight, minimum','4'],['Polysorbate 80 per cent, by weight','0.2'],['Water per cent, by weight','QS'],['Total (per cent)','100']], crop:'Tomato, Vegetables', dose:'Three foliar sprays @ 250 ml/ha'},
+      {name:'Protein Hydrolysate (Amino Acids 10%) — Plant Source (Liquid)', type:'Bio Stimulant', notice:'S.O. 2346(E) · 26-05-25', composition:[['Amino acids derived from maize seeds / grains (starch removed gluten through acid hydrolysis), per cent weight by volume, minimum','10'],['Polysorbate 80 per cent, weight by volume, minimum','2'],['Sulphuric acid per cent weight by volume, minimum','3'],['Water per cent, by weight','QS'],['Total (per cent)','100']], crop:'Chili', dose:'Two foliar applications at 1500 ml/ha'},
+      {name:'Lipo-Chitooligosaccharides from Escherichia coli (Liquid)', type:'Bio Stimulant', notice:'S.O. 2346(E) · 26-05-25', composition:[['Lipo-chitooligosaccharides (LCO SP104) from Escherichia coli, per cent by weight, minimum','19*10'],['Dodecyl benzene sulfonic acid, per cent by weight, minimum','0.032'],['Ethoxylated isodecyl alcohol, per cent by weight, minimum','0.008'],['Potassium phosphate monobasic, per cent by weight, minimum','0.100'],['Potassium phosphate dibasic, per cent by weight, minimum','0.006'],['1,2-Benzisothiazolin-3-one, per cent by weight, minimum','0.25'],['Water per cent, by weight','05'],['Total (per cent)','100']], crop:'Paddy, Vegetables', dose:'300 ml/ha (two foliar sprays)'},
+      {name:'Protein Hydrolysate 27% (Plant Source) (PD)', type:'Bio Stimulant', notice:'S.O. 2346(E) · 26-05-25', composition:[['Soy flour per cent, by weight, minimum','27'],['Enzymes [protease 2% (400 U/g) + amylase 1% (80 U/g)] per cent, by weight, minimum','3'],['Diatomaceous earth powder per cent, by weight, maximum','70'],['Total (per cent)','100']], crop:'Paddy, Vegetables', dose:'Seed treatment @ 3.0 gm/kg seeds before sowing'},
+      {name:'Sargassum Tenerimum 10% (Liquid)', type:'Seaweed extract', notice:'S.O. 3922(E) · 12-09-24', composition:[['Alginic acid percent by weight, minimum','2.0'],['pH (1:2 aqueous solution)','8–10'],['Organic matter (dry mass basis) percent by weight, minimum','20']], crop:'Grapes, Paddy', dose:'One foliar application at 1 Ltr/ha'},
+      {name:'Humates and Fulvates 22% (Liquid)', type:'Humic acid & fulvic acid derivatives', notice:'S.O. 3922(E) · 12-09-24', composition:[['Total water-soluble humates and fulvates percent, weight by volume, minimum','22'],['pH (1:5% aqueous solution)','9.0 (min)'],['Specific gravity','1.05']], crop:'Ground nut', dose:'Two soil applications at 1.25 L/ha'},
+      {name:'Sea Weed Extract — Ascophyllum Nodosum 15% (Liquid)', type:'Bio Stimulant', notice:'S.O. 3922(E) · 12-09-24', composition:[['Alginic acid percent by weight, minimum','1.5'],['Mannitol percent by weight, minimum','1.0'],['pH (10% aqueous solution)','7 ± 1.0'],['Specific gravity','1.0–1.1'],['Total organic carbon percent by weight, minimum','5']], crop:'Green gram', dose:'Two foliar applications at 2.5 Ltr/ha'}
+    ];
+    const cards = document.getElementById('products'), search = document.getElementById('search'), count = document.getElementById('count');
+    const esc = value => String(value).replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
+    function render() {
+      const term = search.value.trim().toLowerCase();
+      const matched = products.filter(p => JSON.stringify(p).toLowerCase().includes(term));
+      count.textContent = `${matched.length} of ${products.length} products`;
+      cards.innerHTML = matched.length ? matched.map(p => `<article><div class="tag">${esc(p.type)}</div><h3>${esc(p.name)}</h3><p class="notification">Gazette notification: ${esc(p.notice)}</p><dl class="details">${p.composition.map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl><p class="use"><strong>Recommended crop</strong>${esc(p.crop)}</p><p class="use"><strong>Application dose</strong>${esc(p.dose)}</p></article>`).join('') : '<div class="empty">No product matches that search. Try a crop, ingredient or product name.</div>';
+    }
+    search.addEventListener('input', render); render();
+    new QRCode(document.getElementById('qrcode'), { text:'https://www.akshatfertilizer.com', width:116, height:116, colorDark:'#12352a', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.H });
+  </script>
+</body>
+</html>
