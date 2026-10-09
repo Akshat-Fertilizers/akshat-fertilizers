@@ -39,6 +39,7 @@
     dt { color:#345648; } dd { margin:0; text-align:right; font-weight:750; color:#153e2c; }
     .use { margin:17px 0 0; padding:13px 14px; border-radius:12px; background:#f0f6e9; font-size:.92rem; }
     .use strong { display:block; margin-bottom:2px; color:#1c603b; font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; }
+    .page-link { margin-top:17px; color:var(--leaf); font-weight:650; text-decoration:none; }
     .empty { grid-column:1/-1; padding:45px; text-align:center; color:var(--muted); border:1px dashed #b9cbb9; border-radius:18px; }
     footer { padding:25px 22px 38px; color:#607469; text-align:center; font-size:.85rem; }
     @media (max-width:720px) { .hero{padding-top:28px}.site-link{font-size:.8rem}.brand{align-items:flex-start}.toolbar{align-items:stretch;flex-direction:column}.intro{align-items:start;flex-direction:column;padding-top:32px}.grid{grid-template-columns:1fr}article{padding:19px}.details div{gap:10px}dd{max-width:45%}select{width:100%} }
@@ -66,6 +67,7 @@
       {name:'Humates and Fulvates 22% (Liquid)', type:'Humic acid & fulvic acid derivatives', notice:'S.O. 3922(E) · 12-09-24', composition:[['Total water-soluble humates and fulvates percent, weight by volume, minimum','22'],['pH (1:5% aqueous solution)','9.0 (min)'],['Specific gravity','1.05']], crop:'Ground nut', dose:'Two soil applications at 1.25 L/ha'},
       {name:'Sea Weed Extract — Ascophyllum Nodosum 15% (Liquid)', type:'Bio Stimulant', notice:'S.O. 3922(E) · 12-09-24', composition:[['Alginic acid percent by weight, minimum','1.5'],['Mannitol percent by weight, minimum','1.0'],['pH (10% aqueous solution)','7 ± 1.0'],['Specific gravity','1.0–1.1'],['Total organic carbon percent by weight, minimum','5']], crop:'Green gram', dose:'Two foliar applications at 2.5 Ltr/ha'}
     ];
+    const pages = ['botanical-seaweed-extract','protein-hydrolysate-amino-acids-10','lipo-chitooligosaccharides','protein-hydrolysate-27','sargassum-tenerimum-10','humates-fulvates-22','ascophyllum-nodosum-15'];
     const cards = document.getElementById('products'), search = document.getElementById('search'), productSelect = document.getElementById('productSelect'), count = document.getElementById('count');
     const esc = value => String(value).replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
     productSelect.insertAdjacentHTML('beforeend', products.map((product, index) => `<option value="${index}">${esc(product.name)}</option>`).join(''));
@@ -74,7 +76,7 @@
       const selected = productSelect.value;
       const matched = products.filter((p, index) => (selected === '' || Number(selected) === index) && JSON.stringify(p).toLowerCase().includes(term));
       count.textContent = `${matched.length} of ${products.length} products`;
-      cards.innerHTML = matched.length ? matched.map(p => `<article><div class="tag">${esc(p.type)}</div><h3>${esc(p.name)}</h3><p class="notification">Gazette notification: ${esc(p.notice)}</p><dl class="details">${p.composition.map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl><p class="use"><strong>Recommended crop</strong>${esc(p.crop)}</p><p class="use"><strong>Application dose</strong>${esc(p.dose)}</p></article>`).join('') : '<div class="empty">No product matches that search. Try a crop, ingredient or product name.</div>';
+      cards.innerHTML = matched.length ? matched.map(p => `<article><div class="tag">${esc(p.type)}</div><h3>${esc(p.name)}</h3><p class="notification">Gazette notification: ${esc(p.notice)}</p><dl class="details">${p.composition.map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl><p class="use"><strong>Recommended crop</strong>${esc(p.crop)}</p><p class="use"><strong>Application dose</strong>${esc(p.dose)}</p><a class="page-link" href="products/${pages[products.indexOf(p)]}.html">View product page →</a></article>`).join('') : '<div class="empty">No product matches that search. Try a crop, ingredient or product name.</div>';
     }
     search.addEventListener('input', render); productSelect.addEventListener('change', render); render();
   </script>
