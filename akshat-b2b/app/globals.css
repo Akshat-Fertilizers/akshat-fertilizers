@@ -6,20 +6,46 @@
   body {
     font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   }
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #15803d;
+    border-radius: 10px;
+  }
 }
 
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-50;
   }
-  .btn-primary { @apply btn bg-emerald-700 text-white hover:bg-emerald-800; }
-  .btn-secondary { @apply btn border border-slate-300 bg-white text-slate-700 hover:bg-slate-50; }
-  .btn-danger { @apply btn bg-rose-600 text-white hover:bg-rose-700; }
+  /* Primary = dark pill that turns brand-green on hover, like the demo's Add-to-Cart */
+  .btn-primary {
+    @apply btn bg-gray-900 text-white shadow-sm hover:bg-brand-700;
+  }
+  .btn-secondary {
+    @apply btn border border-gray-200 bg-white text-gray-700 hover:bg-gray-50;
+  }
+  .btn-danger {
+    @apply btn bg-red-600 text-white hover:bg-red-700;
+  }
   .input {
-    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20;
+    @apply w-full rounded-xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm font-medium outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20;
   }
-  .label { @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500; }
-  .card { @apply rounded-xl border border-slate-200 bg-white shadow-sm; }
-  .th { @apply px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500; }
-  .td { @apply px-3 py-2 text-sm; }
+  .label {
+    @apply mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-400;
+  }
+  .card {
+    @apply rounded-2xl border border-gray-100 bg-white shadow-sm;
+  }
+  .th {
+    @apply px-5 py-3.5 text-left text-[11px] font-black uppercase tracking-widest text-gray-500;
+  }
+  .td {
+    @apply px-5 py-4 text-sm;
+  }
 }

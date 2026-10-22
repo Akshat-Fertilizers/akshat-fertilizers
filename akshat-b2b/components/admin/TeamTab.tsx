@@ -37,7 +37,7 @@ export function TeamTab({ meId }: { meId: string }) {
         text: (
           <>
             Worker <b>{form.email}</b> created as {STAFF_ROLE_LABEL[form.staff_role]}. Share this one-time password — they can change it after signing in:{' '}
-            <code className="rounded bg-emerald-100 px-1.5 py-0.5 font-mono">{res.temp_password}</code>
+            <code className="rounded bg-brand-100 px-1.5 py-0.5 font-mono">{res.temp_password}</code>
           </>
         ),
       });
@@ -66,7 +66,7 @@ export function TeamTab({ meId }: { meId: string }) {
 
   return (
     <div className="space-y-5">
-      <h1 className="flex items-center gap-2 text-xl font-semibold"><Users className="h-5 w-5 text-emerald-700" /> Staff &amp; Roles</h1>
+      <h1 className="flex items-center gap-2 text-xl font-semibold"><Users className="h-5 w-5 text-brand-700" /> Staff &amp; Roles</h1>
       <p className="text-sm text-slate-500">
         Each worker gets their own login and sees only their part of the console. <b>Manager</b> = full access · <b>Operations</b> = order pipeline · <b>Finance</b> = aging &amp; payments · <b>Stock</b> = products, pricing &amp; godown transfer.
       </p>

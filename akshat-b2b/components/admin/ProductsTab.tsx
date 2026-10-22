@@ -105,7 +105,7 @@ export function ProductsTab() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="flex items-center gap-2 text-xl font-semibold"><PackageSearch className="h-5 w-5 text-emerald-700" /> Products &amp; Pricing</h1>
+        <h1 className="flex items-center gap-2 text-xl font-semibold"><PackageSearch className="h-5 w-5 text-brand-700" /> Products &amp; Pricing</h1>
         <div className="ml-auto flex items-center gap-2 text-sm text-slate-500">
           <Badge tone="green">{counts.live} live</Badge>
           <Badge tone="amber">{counts.unpriced} un-priced</Badge>
@@ -154,7 +154,7 @@ export function ProductsTab() {
                           {p.image_url && <img src={p.image_url} alt="" className="h-9 w-9 shrink-0 rounded border border-slate-200 object-contain" loading="lazy" />}
                           <div className="min-w-0">
                             <p className="font-medium leading-tight">{p.name}</p>
-                            <p className="truncate text-xs text-slate-500">{p.subcategory ?? p.sku}{p.source_url && <a href={p.source_url} target="_blank" rel="noopener" className="ml-1 inline-flex text-emerald-700"><ExternalLink className="inline h-3 w-3" /></a>}</p>
+                            <p className="truncate text-xs text-slate-500">{p.subcategory ?? p.sku}{p.source_url && <a href={p.source_url} target="_blank" rel="noopener" className="ml-1 inline-flex text-brand-700"><ExternalLink className="inline h-3 w-3" /></a>}</p>
                           </div>
                         </div>
                       </td>

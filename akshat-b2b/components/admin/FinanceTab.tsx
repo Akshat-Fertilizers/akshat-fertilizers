@@ -85,7 +85,7 @@ export function FinanceTab() {
           </div>
           <div className="grid grid-cols-5 gap-2">
             {BUCKETS.map((b) => (
-              <button key={b} onClick={() => setBucket(bucket === b ? 'ALL' : b)} className={`card p-3 text-left ${bucket === b ? 'ring-2 ring-emerald-600' : ''}`}>
+              <button key={b} onClick={() => setBucket(bucket === b ? 'ALL' : b)} className={`card p-3 text-left ${bucket === b ? 'ring-2 ring-brand-600' : ''}`}>
                 <Badge tone={STATUS_TONE[b]}>{b === 'CURRENT' ? 'Not due' : `${b} days`}</Badge>
                 <p className="mt-2 font-semibold">{formatINR(data.buckets[b].balance)}</p>
                 <p className="text-xs text-slate-500">{data.buckets[b].count} bills</p>
@@ -111,7 +111,7 @@ export function FinanceTab() {
                 <td className="td text-right">{r.age_days}d</td>
                 <td className="td text-right">{formatINR(r.base_amount)}</td>
                 <td className="td text-right">
-                  {Number(r.discount_amount) > 0 ? <span className="text-emerald-700">−{formatINR(r.discount_amount)}</span> : <span className="text-xs text-slate-400">stripped</span>}
+                  {Number(r.discount_amount) > 0 ? <span className="text-brand-700">−{formatINR(r.discount_amount)}</span> : <span className="text-xs text-slate-400">stripped</span>}
                   {r.discount_override && <p className="text-xs text-slate-500">admin override</p>}
                 </td>
                 <td className="td text-right">
@@ -134,7 +134,7 @@ export function FinanceTab() {
 
       <div className="card overflow-x-auto">
         <h2 className="flex items-center gap-2 border-b border-slate-100 px-4 py-3 font-semibold">
-          <CheckCircle2 className="h-4 w-4 text-emerald-600" /> Settled invoices <span className="text-sm font-normal text-slate-500">(latest {data?.settled.length ?? 0})</span>
+          <CheckCircle2 className="h-4 w-4 text-brand-600" /> Settled invoices <span className="text-sm font-normal text-slate-500">(latest {data?.settled.length ?? 0})</span>
         </h2>
         <table className="w-full">
           <thead className="bg-slate-50">
@@ -152,7 +152,7 @@ export function FinanceTab() {
                 <td className="td">{formatDate(o.settled_on)}</td>
                 <td className="td text-xs">{o.settlement_ref ?? '—'}</td>
                 <td className="td text-right">{formatINR(o.base_amount)}</td>
-                <td className="td text-right">{Number(o.discount_amount) > 0 ? <span className="text-emerald-700">−{formatINR(o.discount_amount)}</span> : '—'}</td>
+                <td className="td text-right">{Number(o.discount_amount) > 0 ? <span className="text-brand-700">−{formatINR(o.discount_amount)}</span> : '—'}</td>
                 <td className="td text-right">{o.interest_waived ? <span className="text-xs text-slate-400">waived</span> : formatINR(o.penalty_interest)}</td>
                 <td className="td text-right font-semibold">{formatINR(o.amount_paid)}</td>
               </tr>

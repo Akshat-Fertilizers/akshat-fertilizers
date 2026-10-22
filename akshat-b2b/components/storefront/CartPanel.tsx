@@ -56,13 +56,13 @@ export function CartPanel({
           <div className="mb-1 flex justify-between text-xs">
             <span className="font-medium text-slate-600">Minimum indent ₹50,000</span>
             {t.meetsMinimum ? (
-              <span className="flex items-center gap-1 font-medium text-emerald-700"><CheckCircle2 className="h-3.5 w-3.5" /> Met</span>
+              <span className="flex items-center gap-1 font-medium text-brand-700"><CheckCircle2 className="h-3.5 w-3.5" /> Met</span>
             ) : (
               <span className="text-slate-500">{formatINR(t.shortfall)} to go</span>
             )}
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-            <div className={cn('h-full rounded-full transition-all', t.meetsMinimum ? 'bg-emerald-600' : 'bg-amber-500')} style={{ width: `${progress}%` }} />
+            <div className={cn('h-full rounded-full transition-all', t.meetsMinimum ? 'bg-brand-600' : 'bg-amber-500')} style={{ width: `${progress}%` }} />
           </div>
         </div>
         <dl className="space-y-1">
@@ -74,7 +74,7 @@ export function CartPanel({
           </div>
           <div className="flex justify-between border-t border-slate-100 pt-1 text-base font-semibold"><dt>Invoice total</dt><dd>{formatINR(t.total)}</dd></div>
           {t.subtotal > 0 && (
-            <p className="text-xs text-emerald-700">
+            <p className="text-xs text-brand-700">
               Pay {formatINR(t.payableIfEarly)} within {CREDIT_DAYS} days ({EARLY_DISCOUNT_PCT}% early-payment discount).
             </p>
           )}

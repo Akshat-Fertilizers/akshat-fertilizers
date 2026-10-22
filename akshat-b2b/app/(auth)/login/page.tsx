@@ -30,7 +30,7 @@ export default function LoginPage() {
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      <h1 className="text-xl font-semibold">Dealer sign in</h1>
+      <h1 className="text-2xl font-black text-gray-900">Dealer sign in</h1>
       {error && <Alert>{error}</Alert>}
       <div>
         <label className="label" htmlFor="email">Email</label>
@@ -44,7 +44,7 @@ export default function LoginPage() {
         {busy ? <Spinner /> : <LogIn className="h-4 w-4" />} Sign in
       </button>
       <p className="text-center text-sm text-slate-500">
-        New dealer? <Link className="font-medium text-emerald-700 hover:underline" href="/register">Register for a B2B account</Link>
+        New dealer? <Link className="font-medium text-brand-700 hover:underline" href="/register">Register for a B2B account</Link>
       </p>
     </form>
   );

@@ -59,7 +59,7 @@ export function KycTab() {
         <h1 className="text-xl font-semibold">KYC account approvals</h1>
         <div className="ml-auto flex rounded-lg border border-slate-300 bg-white p-0.5 text-sm">
           {(['pending', 'approved'] as const).map((v) => (
-            <button key={v} onClick={() => setView(v)} className={`rounded-md px-3 py-1 capitalize ${view === v ? 'bg-emerald-600 text-white' : 'text-slate-600'}`}>
+            <button key={v} onClick={() => setView(v)} className={`rounded-md px-3 py-1 capitalize ${view === v ? 'bg-brand-600 text-white' : 'text-slate-600'}`}>
               {v} ({users.filter((u) => (v === 'pending' ? !u.is_approved : u.is_approved)).length})
             </button>
           ))}

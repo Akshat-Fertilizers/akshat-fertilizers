@@ -51,7 +51,7 @@ export default function AdminDashboardPage() {
     <div className="flex min-h-screen">
       <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-slate-200 bg-slate-900 text-slate-200 md:flex">
         <div className="flex items-center gap-2 px-5 py-5 font-semibold text-white">
-          <Sprout className="h-6 w-6 text-emerald-400" /> Akshat ERP
+          <Sprout className="h-6 w-6 text-brand-400" /> Akshat ERP
         </div>
         <nav className="flex-1 space-y-1 px-3">
           {tabs.map(({ id, label, icon: Icon }) => (
@@ -61,7 +61,7 @@ export default function AdminDashboardPage() {
                 setTab(id);
                 history.replaceState(null, '', `#${id}`);
               }}
-              className={cn('flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition', tab === id ? 'bg-emerald-600 text-white' : 'hover:bg-slate-800')}
+              className={cn('flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition', tab === id ? 'bg-brand-600 text-white' : 'hover:bg-slate-800')}
             >
               <Icon className="h-4 w-4" /> {label}
             </button>
@@ -69,7 +69,7 @@ export default function AdminDashboardPage() {
         </nav>
         <div className="border-t border-slate-800 p-4 text-xs">
           <p className="truncate text-slate-200">{profile.email}</p>
-          <p className="text-emerald-400">{roleLabel}</p>
+          <p className="text-brand-400">{roleLabel}</p>
           <button onClick={signOut} className="mt-2 flex items-center gap-2 text-slate-300 hover:text-white"><LogOut className="h-3.5 w-3.5" /> Sign out</button>
         </div>
       </aside>
@@ -77,7 +77,7 @@ export default function AdminDashboardPage() {
       <div className="min-w-0 flex-1">
         <div className="sticky top-0 z-20 flex gap-1 overflow-x-auto border-b border-slate-200 bg-white p-2 md:hidden">
           {tabs.map(({ id, label }) => (
-            <button key={id} onClick={() => setTab(id)} className={cn('whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-medium', tab === id ? 'bg-emerald-600 text-white' : 'text-slate-600')}>
+            <button key={id} onClick={() => setTab(id)} className={cn('whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-medium', tab === id ? 'bg-brand-600 text-white' : 'text-slate-600')}>
               {label}
             </button>
           ))}

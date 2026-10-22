@@ -5,7 +5,8 @@ import { supabaseBrowser } from '@/lib/supabase';
 import { apiFetch } from '@/lib/api';
 import type { Order, OrderStatus } from '@/lib/types';
 import { cn, formatDate, formatINR, todayIST } from '@/lib/utils';
-import { Alert, Badge, Empty, Spinner, STATUS_TONE, paymentLabel } from '@/components/ui';
+import { Alert, Badge, Empty, Metric, Spinner, STATUS_TONE, paymentLabel } from '@/components/ui';
+import { TrendingUp, ShoppingBag, Wallet, AlertCircle } from 'lucide-react';
 
 type Filter = OrderStatus | 'ACTIVE' | 'SETTLED' | 'ALL' | 'TALLY_QUEUE';
 const FILTERS: Filter[] = ['ACTIVE', 'PENDING', 'APPROVED', 'DISPATCHED', 'DELIVERED', 'SETTLED', 'CANCELLED', 'TALLY_QUEUE', 'ALL'];
@@ -73,15 +74,39 @@ export function OperationsTab() {
     }
   }
 
+  const metrics = useMemo(() => {
+    const live = orders.filter((o) => o.status !== 'CANCELLED');
+    return {
+      collected: live.reduce((s, o) => s + Number(o.amount_paid), 0),
+      receivable: live.filter((o) => o.payment_status !== 'PAID').reduce((s, o) => s + (Number(o.amount_due) - Number(o.amount_paid)), 0),
+      active: live.filter((o) => o.payment_status !== 'PAID').length,
+      pending: orders.filter((o) => o.status === 'PENDING').length,
+    };
+  }, [orders]);
+
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-xl font-semibold">Operations pipeline</h1>
-        <button onClick={load} className="btn-secondary ml-auto"><RefreshCw className={cn('h-4 w-4', loading && 'animate-spin')} /> Refresh</button>
+    <div className="space-y-6 animate-fade-in">
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <div>
+          <h1 className="text-3xl font-black tracking-tight text-gray-900">Platform Dashboard</h1>
+          <p className="mt-1 font-medium text-gray-500">Real-time business metrics &amp; fulfilment tracking</p>
+        </div>
+        <button onClick={load} className="btn-secondary"><RefreshCw className={cn('h-4 w-4', loading && 'animate-spin')} /> Refresh</button>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <Metric label="Gross Revenue (collected)" value={formatINR(metrics.collected)} accent="green" icon={TrendingUp} hint="Payments received to date" />
+        <Metric label="Outstanding Receivables" value={formatINR(metrics.receivable)} accent="amber" icon={Wallet} hint="Unpaid dealer balances" />
+        <Metric label="Active Orders" value={metrics.active} accent="blue" icon={ShoppingBag} hint="Open, not yet settled" />
+        <Metric label="Pending Approval" value={metrics.pending} accent="red" icon={AlertCircle} pulse={metrics.pending > 0} hint="Awaiting your action" />
+      </div>
+
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-black text-gray-900">Order Fulfilment Pipeline</h2>
       </div>
       <div className="flex flex-wrap gap-2">
         {FILTERS.map((f) => (
-          <button key={f} onClick={() => setFilter(f)} className={cn('rounded-full border px-3 py-1 text-xs font-medium', filter === f ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 bg-white text-slate-600')}>
+          <button key={f} onClick={() => setFilter(f)} className={cn('rounded-full border px-3 py-1 text-xs font-medium', filter === f ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300 bg-white text-slate-600')}>
             {FILTER_LABEL[f] ?? f} <span className="opacity-70">({counts[f] ?? 0})</span>
           </button>
         ))}
@@ -95,7 +120,7 @@ export function OperationsTab() {
           </thead>
           <tbody className="divide-y divide-slate-100">
             {visible.map((o) => (
-              <tr key={o.id} onClick={() => open(o)} className="cursor-pointer hover:bg-emerald-50/50">
+              <tr key={o.id} onClick={() => open(o)} className="cursor-pointer hover:bg-brand-50/50">
                 <td className="td font-medium">{o.order_no}</td>
                 <td className="td">{o.buyer?.business_name}<p className="text-xs text-slate-500">{o.buyer?.gstin}</p></td>
                 <td className="td">{o.godown_id}</td>
@@ -176,7 +201,7 @@ export function OperationsTab() {
                   {selected.settlement_ref && <> · ref <b>{selected.settlement_ref}</b></>} · total collected {formatINR(selected.amount_paid)}
                 </Alert>
               ) : selected.status !== 'CANCELLED' && (
-                <section className="rounded-lg border border-emerald-200 bg-emerald-50/50 p-4">
+                <section className="rounded-lg border border-brand-200 bg-brand-50/50 p-4">
                   <p className="label">Mark as settled</p>
                   <p className="mb-3 text-xs text-slate-500">
                     Books the full remaining balance as received on this date. Early discount and 18% p.a. interest are recalculated as of the receipt date.
