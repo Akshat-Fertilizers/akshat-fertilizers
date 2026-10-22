@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { HttpError, readJson, requireAdmin, route, unwrap } from '@/lib/supabase-server';
+import { HttpError, readJson, requireArea, route, unwrap } from '@/lib/supabase-server';
 import { UUID_RE } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
@@ -8,7 +8,7 @@ export const runtime = 'nodejs';
 const ALLOWED = ['APPROVED', 'DISPATCHED', 'DELIVERED', 'CANCELLED'] as const;
 
 export const POST = route<{ params: { id: string } }>(async (req, { params }) => {
-  const ctx = await requireAdmin(req);
+  const ctx = await requireArea(req, 'operations');
   if (!UUID_RE.test(params.id)) throw new HttpError(400, 'INVALID_ORDER', 'Invalid order id');
   const { status } = await readJson<{ status?: string }>(req);
   if (!status || !(ALLOWED as readonly string[]).includes(status)) {

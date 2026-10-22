@@ -10,9 +10,6 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  async redirects() {
-    return [{ source: '/', destination: '/home', permanent: false }];
-  },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },

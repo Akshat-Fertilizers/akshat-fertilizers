@@ -1,4 +1,6 @@
 export type Role = 'buyer' | 'admin';
+export type StaffRole = 'manager' | 'operations' | 'finance' | 'stock';
+export type StaffArea = 'operations' | 'finance' | 'products' | 'stock' | 'kyc' | 'team';
 export type OrderStatus = 'PENDING' | 'APPROVED' | 'DISPATCHED' | 'DELIVERED' | 'CANCELLED';
 export type PaymentStatus = 'UNPAID' | 'PARTIAL' | 'PAID';
 
@@ -10,6 +12,7 @@ export interface Profile {
   state: string | null;
   phone: string | null;
   role: Role;
+  staff_role: StaffRole | null;
   is_approved: boolean;
   credit_limit: number;
   godown_id: string | null;

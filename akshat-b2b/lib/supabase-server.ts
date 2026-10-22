@@ -58,11 +58,41 @@ export async function requireUser(req: Request): Promise<AuthContext> {
   return { user: data.user, profile: profile as Profile, token, db: userClient(token), admin };
 }
 
+export type StaffArea = 'operations' | 'finance' | 'products' | 'stock' | 'kyc' | 'team';
+
+/** Effective staff role: an admin without an explicit staff_role is a full manager. */
+export function staffRoleOf(profile: Profile): string | null {
+  return profile.role === 'admin' ? (profile.staff_role ?? 'manager') : null;
+}
+
+export function staffCan(profile: Profile, area: StaffArea): boolean {
+  switch (staffRoleOf(profile)) {
+    case 'manager':
+      return true;
+    case 'operations':
+      return area === 'operations';
+    case 'finance':
+      return area === 'finance';
+    case 'stock':
+      return area === 'products' || area === 'stock';
+    default:
+      return false;
+  }
+}
+
 export async function requireAdmin(req: Request): Promise<AuthContext> {
   const ctx = await requireUser(req);
   if (ctx.profile.role !== 'admin') throw new HttpError(403, 'FORBIDDEN', 'Admin access required');
   return ctx;
 }
+
+/** Requires a staff login with permission for a specific admin area. */
+export async function requireArea(req: Request, area: StaffArea): Promise<AuthContext> {
+  const ctx = await requireAdmin(req);
+  if (!staffCan(ctx.profile, area)) throw new HttpError(403, 'FORBIDDEN', `Your role cannot access ${area}`);
+  return ctx;
+}
+
 
 /** Constant-time string compare for API keys / cron secrets. */
 export function safeEqual(a: string, b: string): boolean {

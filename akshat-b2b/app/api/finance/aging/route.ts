@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { HttpError, requireAdmin, route, safeEqual, serviceClient, unwrap, bearerToken } from '@/lib/supabase-server';
+import { HttpError, requireArea, route, safeEqual, serviceClient, unwrap, bearerToken } from '@/lib/supabase-server';
 import type { AgingBucket, AgingRow, Order } from '@/lib/types';
 import { round2 } from '@/lib/utils';
 
@@ -11,7 +11,7 @@ async function authorize(req: Request) {
   const secret = process.env.CRON_SECRET;
   const token = bearerToken(req);
   if (secret && token && safeEqual(token, secret)) return { actor: null as string | null, admin: serviceClient(), isCron: true };
-  const ctx = await requireAdmin(req);
+  const ctx = await requireArea(req, 'finance');
   return { actor: ctx.user.id, admin: ctx.admin, isCron: false };
 }
 

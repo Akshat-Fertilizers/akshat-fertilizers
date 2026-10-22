@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { HttpError, readJson, requireAdmin, route, unwrap } from '@/lib/supabase-server';
+import { HttpError, readJson, requireArea, route, unwrap } from '@/lib/supabase-server';
 import { UUID_RE } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
@@ -18,7 +18,7 @@ interface Body {
 }
 
 export const POST = route(async (req) => {
-  const ctx = await requireAdmin(req);
+  const ctx = await requireArea(req, 'stock');
   const b = await readJson<Body>(req);
   const qty = Number(b.qty);
   if (!b.product_id || !UUID_RE.test(b.product_id)) throw new HttpError(400, 'INVALID_PRODUCT', 'product_id is required');

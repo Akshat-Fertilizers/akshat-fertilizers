@@ -50,3 +50,33 @@ export function projectedInterest(baseAmount: number, ageDays: number, daysPastD
   if (ageDays <= INTEREST_TRIGGER_DAYS) return 0;
   return round2(((baseAmount * INTEREST_APY) / 365) * Math.max(0, daysPastDue));
 }
+
+// --- Staff access (client-safe mirror of requireArea in lib/supabase-server.ts) ---
+import type { Profile, StaffArea } from '@/lib/types';
+
+/** Effective staff role: an admin with no explicit staff_role is a full manager; buyers are null. */
+export function effectiveStaffRole(p: Profile | null | undefined): string | null {
+  return p?.role === 'admin' ? (p.staff_role ?? 'manager') : null;
+}
+
+export function staffCan(p: Profile | null | undefined, area: StaffArea): boolean {
+  switch (effectiveStaffRole(p)) {
+    case 'manager':
+      return true;
+    case 'operations':
+      return area === 'operations';
+    case 'finance':
+      return area === 'finance';
+    case 'stock':
+      return area === 'products' || area === 'stock';
+    default:
+      return false;
+  }
+}
+
+export const STAFF_ROLE_LABEL: Record<string, string> = {
+  manager: 'Manager (full access)',
+  operations: 'Operations',
+  finance: 'Finance',
+  stock: 'Stock & Pricing',
+};

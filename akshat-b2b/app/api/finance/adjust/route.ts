@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { HttpError, readJson, requireAdmin, route, unwrap } from '@/lib/supabase-server';
+import { HttpError, readJson, requireArea, route, unwrap } from '@/lib/supabase-server';
 import { UUID_RE } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
@@ -8,7 +8,7 @@ export const runtime = 'nodejs';
 type Action = 'WAIVE_INTEREST' | 'REAPPLY_DISCOUNT' | 'RECORD_PAYMENT';
 
 export const POST = route(async (req) => {
-  const ctx = await requireAdmin(req);
+  const ctx = await requireArea(req, 'finance');
   const body = await readJson<{ order_id?: string; action?: Action; amount?: number; paid_on?: string; note?: string }>(req);
   if (!body.order_id || !UUID_RE.test(body.order_id)) throw new HttpError(400, 'INVALID_ORDER', 'order_id is required');
   const note = typeof body.note === 'string' ? body.note.slice(0, 300) : null;

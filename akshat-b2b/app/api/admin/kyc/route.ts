@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { HttpError, readJson, requireAdmin, route, unwrap } from '@/lib/supabase-server';
+import { HttpError, readJson, requireArea, route, unwrap } from '@/lib/supabase-server';
 import { UUID_RE } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 export const POST = route(async (req) => {
-  const ctx = await requireAdmin(req);
+  const ctx = await requireArea(req, 'kyc');
   const b = await readJson<{ user_id?: string; is_approved?: boolean; credit_limit?: number; godown_id?: string }>(req);
   if (!b.user_id || !UUID_RE.test(b.user_id)) throw new HttpError(400, 'INVALID_USER', 'user_id is required');
   if (b.credit_limit !== undefined && (!Number.isFinite(Number(b.credit_limit)) || Number(b.credit_limit) < 0)) {
