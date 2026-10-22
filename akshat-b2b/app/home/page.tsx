@@ -151,14 +151,18 @@ export default function StorefrontPage() {
                     return (
                       <article key={p.id} className="card flex flex-col p-4">
                         <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <p className="text-xs font-medium text-slate-500">{p.category} · {p.sku}</p>
+                          <div className="min-w-0">
+                            <p className="text-xs font-medium text-slate-500">{p.subcategory ?? p.category}</p>
                             <h3 className="font-semibold leading-snug">{p.name}</h3>
                           </div>
-                          <Package className="h-5 w-5 shrink-0 text-slate-300" />
+                          {p.image_url ? (
+                            <img src={p.image_url} alt="" className="h-12 w-12 shrink-0 rounded-lg border border-slate-200 object-contain" loading="lazy" />
+                          ) : (
+                            <Package className="h-5 w-5 shrink-0 text-slate-300" />
+                          )}
                         </div>
                         <p className="mt-2 text-lg font-semibold">
-                          {formatINR(p.price)}<span className="text-xs font-normal text-slate-500"> / {p.pack_size_kg} kg {p.unit.toLowerCase()} + {p.gst_rate}% GST</span>
+                          {formatINR(p.price)}<span className="text-xs font-normal text-slate-500"> / {p.pack_label ?? p.unit.toLowerCase()} + {p.gst_rate}% GST</span>
                         </p>
                         <p className="mt-1 text-xs">
                           {available > 0 ? <Badge tone={available < 50 ? 'amber' : 'green'}>{available.toLocaleString('en-IN')} in stock</Badge> : <Badge tone="red">Out of stock</Badge>}

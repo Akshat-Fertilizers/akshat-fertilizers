@@ -31,9 +31,18 @@ export interface Product {
   hsn_code: string;
   unit: string;
   pack_size_kg: number;
-  price: number;
+  /** null until the admin prices it; only priced products can be active. */
+  price: number | null;
   gst_rate: number;
   is_active: boolean;
+  description: string | null;
+  subcategory: string | null;
+  pack_label: string | null;
+  image_url: string | null;
+  brochure_url: string | null;
+  specs: string[][];
+  source_url: string | null;
+  sort_order: number;
 }
 
 export interface InventoryRow {

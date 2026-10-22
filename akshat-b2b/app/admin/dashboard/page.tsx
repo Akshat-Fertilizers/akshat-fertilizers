@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeftRight, BadgeCheck, IndianRupee, LogOut, Sprout, Truck } from 'lucide-react';
+import { ArrowLeftRight, BadgeCheck, IndianRupee, LogOut, PackageSearch, Sprout, Truck } from 'lucide-react';
 import { useProfile } from '@/lib/hooks/useProfile';
 import { cn } from '@/lib/utils';
 import { FullPageLoader } from '@/components/ui';
@@ -9,10 +9,12 @@ import { OperationsTab } from '@/components/admin/OperationsTab';
 import { FinanceTab } from '@/components/admin/FinanceTab';
 import { StockTab } from '@/components/admin/StockTab';
 import { KycTab } from '@/components/admin/KycTab';
+import { ProductsTab } from '@/components/admin/ProductsTab';
 
 const TABS = [
   { id: 'ops', label: 'Operations Pipeline', icon: Truck },
   { id: 'finance', label: 'Finance & Aging', icon: IndianRupee },
+  { id: 'products', label: 'Products & Pricing', icon: PackageSearch },
   { id: 'stock', label: 'Godown Stock Transfer', icon: ArrowLeftRight },
   { id: 'kyc', label: 'KYC Account Approvals', icon: BadgeCheck },
 ] as const;
@@ -73,6 +75,7 @@ export default function AdminDashboardPage() {
         <main className="mx-auto max-w-7xl p-4 md:p-8">
           {tab === 'ops' && <OperationsTab />}
           {tab === 'finance' && <FinanceTab />}
+          {tab === 'products' && <ProductsTab />}
           {tab === 'stock' && <StockTab adminId={profile.id} />}
           {tab === 'kyc' && <KycTab />}
         </main>
