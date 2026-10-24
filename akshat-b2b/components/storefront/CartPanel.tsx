@@ -33,7 +33,7 @@ export function CartPanel({
   return (
     <aside className="card sticky top-20 flex max-h-[calc(100vh-6rem)] flex-col">
       <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
-        <h2 className="flex items-center gap-2 font-semibold"><ShoppingCart className="h-4 w-4" /> Indent cart</h2>
+        <h2 className="flex items-center gap-2 font-semibold"><ShoppingCart className="h-4 w-4" /> Your Order</h2>
         {lines.length > 0 && <button onClick={onClear} className="text-xs text-slate-500 hover:text-rose-600">Clear</button>}
       </div>
 
@@ -54,7 +54,7 @@ export function CartPanel({
       <div className="space-y-3 border-t border-slate-100 p-4 text-sm">
         <div>
           <div className="mb-1 flex justify-between text-xs">
-            <span className="font-medium text-slate-600">Minimum indent ₹50,000</span>
+            <span className="font-medium text-slate-600">Minimum order ₹50,000</span>
             {t.meetsMinimum ? (
               <span className="flex items-center gap-1 font-medium text-brand-700"><CheckCircle2 className="h-3.5 w-3.5" /> Met</span>
             ) : (
@@ -80,7 +80,7 @@ export function CartPanel({
           )}
         </dl>
         <button className="btn-primary w-full" disabled={!!blockReason || busy} onClick={onSubmit}>
-          {busy && <Spinner />} Place indent
+          {busy && <Spinner />} Place Order
         </button>
         {blockReason && lines.length > 0 && <p className="text-center text-xs text-amber-700">{blockReason}</p>}
       </div>

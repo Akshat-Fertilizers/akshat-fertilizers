@@ -42,8 +42,8 @@ export default function RegisterPage() {
       <div className="space-y-3">
         <h1 className="text-2xl font-black text-gray-900">Registration received</h1>
         <Alert tone="green">
-          Please verify your email. Our accounts team will review your GSTIN and set your credit limit — you can view stock and place indents once
-          your KYC is approved.
+          Please verify your email. Our accounts team will review your details and set your credit limit — you can view stock and place indents once
+          your account is approved.
         </Alert>
         <Link href="/login" className="btn-secondary w-full">Back to sign in</Link>
       </div>
@@ -87,7 +87,7 @@ export default function RegisterPage() {
         </div>
       </div>
       <button className="btn-primary w-full" disabled={busy}>
-        {busy ? <Spinner /> : <UserPlus className="h-4 w-4" />} Submit for KYC approval
+        {busy ? <Spinner /> : <UserPlus className="h-4 w-4" />} Submit for Approval
       </button>
       <p className="text-center text-sm text-slate-500">
         Already registered? <Link className="font-medium text-brand-700 hover:underline" href="/login">Sign in</Link>

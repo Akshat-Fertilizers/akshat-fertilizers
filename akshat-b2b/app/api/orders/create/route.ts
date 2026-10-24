@@ -17,7 +17,7 @@ export const POST = route(async (req) => {
   const { profile } = ctx;
 
   // 1. KYC gate
-  if (profile.role !== 'buyer') throw new HttpError(403, 'ONLY_BUYERS_CAN_ORDER', 'Admin accounts cannot place indents');
+  if (profile.role !== 'buyer') throw new HttpError(403, 'ONLY_BUYERS_CAN_ORDER', 'Admin accounts cannot place orders');
   if (!profile.is_approved) throw new HttpError(403, 'KYC_NOT_APPROVED', 'Your account is pending KYC approval');
   if (!profile.godown_id) throw new HttpError(409, 'NO_GODOWN_ASSIGNED', 'No godown is mapped to your account yet');
 

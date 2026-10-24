@@ -116,7 +116,7 @@ export function OperationsTab() {
       <div className="card overflow-x-auto">
         <table className="w-full">
           <thead className="bg-slate-50">
-            <tr><th className="th">Indent</th><th className="th">Dealer</th><th className="th">Godown</th><th className="th">Date</th><th className="th text-right">Invoice</th><th className="th">Status</th><th className="th">Payment</th><th className="th">Tally</th></tr>
+            <tr><th className="th">Order</th><th className="th">Dealer</th><th className="th">Godown</th><th className="th">Date</th><th className="th text-right">Invoice</th><th className="th">Status</th><th className="th">Payment</th><th className="th">Tally</th></tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {visible.map((o) => (
@@ -145,7 +145,7 @@ export function OperationsTab() {
           <>
             <div className="flex items-start justify-between border-b border-slate-200 p-5">
               <div>
-                <p className="text-xs text-slate-500">Indent</p>
+                <p className="text-xs text-slate-500">Order</p>
                 <h2 className="text-lg font-semibold">{selected.order_no}</h2>
                 <div className="mt-1 flex gap-2">
                   <Badge tone={STATUS_TONE[selected.status]}>{selected.status}</Badge>

@@ -83,7 +83,7 @@ export default function StorefrontPage() {
         method: 'POST',
         json: { items, client_ref: clientRef },
       });
-      setFlash({ tone: 'green', msg: <>Indent <b>{res.order.order_no}</b> placed. Pay {formatINR(res.order.amount_due)} by {formatDate(res.order.due_date)} to keep the early-payment discount.</> });
+      setFlash({ tone: 'green', msg: <>Order <b>{res.order.order_no}</b> placed. Pay {formatINR(res.order.amount_due)} by {formatDate(res.order.due_date)} to keep the early-payment discount.</> });
       setCart({});
       setClientRef(crypto.randomUUID());
       await refresh();
@@ -104,7 +104,7 @@ export default function StorefrontPage() {
         });
         await refresh();
       } else {
-        setFlash({ tone: 'red', msg: e instanceof Error ? e.message : 'Could not place indent' });
+        setFlash({ tone: 'red', msg: e instanceof Error ? e.message : 'Could not place order' });
       }
     } finally {
       setBusy(false);
@@ -120,9 +120,9 @@ export default function StorefrontPage() {
         {!approved ? (
           <div className="card mx-auto max-w-xl p-8 text-center">
             <ShieldAlert className="mx-auto h-10 w-10 text-amber-500" />
-            <h1 className="mt-3 text-lg font-semibold">KYC approval pending</h1>
+            <h1 className="mt-3 text-lg font-semibold">Account approval pending</h1>
             <p className="mt-2 text-sm text-slate-600">
-              Thanks for registering <b>{profile.business_name}</b> ({profile.gstin}). Our accounts team is verifying your GSTIN and setting your credit
+              Thanks for registering <b>{profile.business_name}</b> ({profile.gstin}). Our accounts team is reviewing your details and setting your credit
               limit. Stock and ordering unlock automatically once approved.
             </p>
           </div>
@@ -188,11 +188,11 @@ export default function StorefrontPage() {
                 </div>
 
                 <div className="card">
-                  <h2 className="flex items-center gap-2 border-b border-slate-100 px-4 py-3 font-semibold"><Clock className="h-4 w-4" /> Recent indents</h2>
+                  <h2 className="flex items-center gap-2 border-b border-slate-100 px-4 py-3 font-semibold"><Clock className="h-4 w-4" /> Recent orders</h2>
                   {orders.length ? (
                     <div className="overflow-x-auto">
                       <table className="w-full">
-                        <thead className="bg-slate-50"><tr><th className="th">Indent</th><th className="th">Date</th><th className="th">Status</th><th className="th text-right">Due</th><th className="th">Due date</th><th className="th">Payment</th></tr></thead>
+                        <thead className="bg-slate-50"><tr><th className="th">Order</th><th className="th">Date</th><th className="th">Status</th><th className="th text-right">Due</th><th className="th">Due date</th><th className="th">Payment</th></tr></thead>
                         <tbody className="divide-y divide-slate-100">
                           {orders.map((o) => (
                             <tr key={o.id}>
@@ -208,7 +208,7 @@ export default function StorefrontPage() {
                       </table>
                     </div>
                   ) : (
-                    <Empty>No indents yet.</Empty>
+                    <Empty>No orders yet.</Empty>
                   )}
                 </div>
               </section>
