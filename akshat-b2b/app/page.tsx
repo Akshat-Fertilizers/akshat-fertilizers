@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { Leaf, LogIn, Mail, Phone, ShieldCheck, Sprout, Truck } from 'lucide-react';
+import { Leaf, LogIn, Mail, Phone, ShieldCheck, Truck } from 'lucide-react';
 import { serviceClient } from '@/lib/supabase-server';
 import type { Product } from '@/lib/types';
+import { HeroCarousel } from '@/components/public/HeroCarousel';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -62,26 +63,14 @@ export default async function PublicHome() {
       </header>
 
       <main className="flex-1">
-        {/* Hero — bright crop photo */}
-        <section className="relative flex min-h-[460px] items-center overflow-hidden">
-          <img src="/brand/1579185604slide1.jpg" alt="Healthy flowering crops" className="absolute inset-0 h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-950/85 via-brand-900/55 to-transparent" />
-          <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-16 md:px-6">
-            <div className="max-w-xl">
-              <span className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-black uppercase tracking-widest text-white backdrop-blur"><Sprout className="h-3.5 w-3.5" /> Good Seeds · Healthy Field</span>
-              <h1 className="text-4xl font-black leading-tight text-white drop-shadow-md md:text-5xl">Healthy crops.<br />Higher yields.</h1>
-              <p className="mt-4 max-w-md text-lg font-medium text-white/90">Water-soluble NPK, micronutrients, bio-stimulants and crop protection — made by Akshat Fertilizers for farmers across India.</p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <a href="#products" className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 font-black text-brand-800 shadow-lg transition hover:bg-brand-50"><Leaf className="h-4 w-4" /> See Products</a>
-                <a href={`tel:${PHONE}`} className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-6 py-3.5 font-black text-white shadow-lg transition hover:bg-brand-500"><Phone className="h-4 w-4" /> Call to Order</a>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* Hero — modern auto-playing carousel */}
+        <div className="px-3 md:px-6">
+          <HeroCarousel />
+        </div>
 
         {/* Value strip */}
-        <section className="border-b border-gray-100 bg-white">
-          <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:grid-cols-3 md:px-6">
+        <section className="mt-4 bg-white">
+          <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:grid-cols-3 md:px-6">
             {[
               { icon: Leaf, t: 'Trusted Quality', d: 'ISO-certified plant nutrition, straight from the manufacturer.' },
               { icon: Truck, t: 'Doorstep Delivery', d: 'Delivered to your nearest godown across the state.' },
