@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "regions": [
+    "bom1"
+  ],
+  "crons": [
+    {
+      "path": "/api/finance/aging",
+      "schedule": "30 0 * * *"
+    }
+  ]
+}

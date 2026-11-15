@@ -1,0 +1,3 @@
+# The B2B Next.js app is deployed as its own Vercel project (root directory: akshat-b2b).
+# Keep its source out of the static catalogue deployment.
+akshat-b2b
