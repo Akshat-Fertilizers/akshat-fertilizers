@@ -16,7 +16,7 @@ export function useProfile() {
       setLoading(false);
       return;
     }
-    const { data } = await supabaseBrowser().from('users').select('*').eq('id', s.user.id).single();
+    const { data } = await supabaseBrowser().from('profiles').select('*').eq('id', s.user.id).single();
     setProfile((data as Profile) ?? null);
     setLoading(false);
   }, []);

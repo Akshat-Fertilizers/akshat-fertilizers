@@ -21,21 +21,28 @@ export function Badge({ tone = 'slate', children, className }: { tone?: Tone; ch
 }
 
 export const STATUS_TONE: Record<string, Tone> = {
-  PENDING: 'slate',
-  APPROVED: 'blue',
-  DISPATCHED: 'blue',
+  // account status
+  PENDING: 'amber',
+  APPROVED: 'green',
+  REJECTED: 'red',
+  // order status
+  RECEIVED: 'slate',
+  CONFIRMED_OFFLINE: 'blue',
+  DISPATCHED: 'violet',
   DELIVERED: 'green',
   CANCELLED: 'red',
+  // payment status
   UNPAID: 'amber',
   PARTIAL: 'blue',
   PAID: 'green',
-  SETTLED: 'green',
-  CURRENT: 'green',
-  '1-30': 'amber',
-  '31-60': 'amber',
-  '61-90': 'red',
-  '90+': 'red',
+  OVERDUE: 'red',
+  // customer type
+  DEALER: 'blue',
+  FARMER: 'green',
 };
+
+export const prettyStatus = (s: string) =>
+  s.replace(/_/g, ' ').toLowerCase().replace(/^./, (c) => c.toUpperCase());
 
 export function Spinner({ className }: { className?: string }) {
   return <Loader2 className={cn('h-4 w-4 animate-spin', className)} />;
@@ -116,4 +123,4 @@ export function Empty({ children }: { children: React.ReactNode }) {
 }
 
 /** Fully-paid invoices are shown to admins as "Settled". */
-export const paymentLabel = (o: { payment_status: string }) => (o.payment_status === 'PAID' ? 'SETTLED' : o.payment_status);
+export const paymentLabel = (o: { payment_status: string }) => o.payment_status;

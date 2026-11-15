@@ -1,128 +1,100 @@
-export type Role = 'buyer' | 'admin';
-export type StaffRole = 'manager' | 'operations' | 'finance' | 'stock';
-export type StaffArea = 'operations' | 'finance' | 'products' | 'stock' | 'kyc' | 'team';
-export type OrderStatus = 'PENDING' | 'APPROVED' | 'DISPATCHED' | 'DELIVERED' | 'CANCELLED';
-export type PaymentStatus = 'UNPAID' | 'PARTIAL' | 'PAID';
+export type Role = 'ADMIN' | 'DEALER' | 'FARMER';
+export type Status = 'PENDING' | 'APPROVED' | 'REJECTED';
+export type StaffTier = 'manager' | 'operations' | 'finance' | 'catalog';
+export type StaffArea = 'operations' | 'finance' | 'catalog' | 'customers' | 'team';
+export type OrderStatus = 'RECEIVED' | 'CONFIRMED_OFFLINE' | 'DISPATCHED' | 'DELIVERED' | 'CANCELLED';
+export type PaymentTerms = 'CREDIT_15D' | 'ADVANCE';
+export type PaymentStatus = 'UNPAID' | 'PARTIAL' | 'PAID' | 'OVERDUE';
 
 export interface Profile {
   id: string;
-  email: string;
-  business_name: string | null;
-  gstin: string | null;
-  state: string | null;
-  phone: string | null;
   role: Role;
-  staff_role: StaffRole | null;
-  is_approved: boolean;
-  credit_limit: number;
-  godown_id: string | null;
-  approved_at: string | null;
+  staff_tier: StaffTier | null;
+  status: Status;
+  full_name: string | null;
+  mobile: string | null;
+  whatsapp: string | null;
+  email: string | null;
+  state: string | null;
+  city: string | null;
+  entity_name: string | null; // Business Name (DEALER) or Farm Name (FARMER)
+  custom_discount_pct: number | null;
   created_at: string;
-}
-
-export interface Godown {
-  id: string;
-  name: string;
-  state: string;
 }
 
 export interface Product {
   id: string;
-  sku: string;
+  sku: string | null;
   name: string;
-  category: string;
-  hsn_code: string;
-  unit: string;
-  pack_size_kg: number;
-  /** null until the admin prices it; only priced products can be active. */
-  price: number | null;
-  gst_rate: number;
-  is_active: boolean;
+  category: string | null;
   description: string | null;
-  subcategory: string | null;
-  pack_label: string | null;
+  specifications: string | null;
+  unit: string | null;
+  dealer_price: number | null;
+  farmer_price: number | null;
+  is_active: boolean;
   image_url: string | null;
-  brochure_url: string | null;
-  specs: string[][];
-  source_url: string | null;
-  sort_order: number;
+  created_at: string;
 }
 
-export interface InventoryRow {
-  godown_id: string;
-  product_id: string;
-  stock_qty: number;
-  updated_at: string;
+/** A catalogue row as returned by the my_catalog() RPC (single role-appropriate price). */
+export interface CatalogItem {
+  id: string;
+  name: string;
+  category: string | null;
+  description: string | null;
+  specifications: string | null;
+  unit: string | null;
+  image_url: string | null;
+  price: number | null;
+}
+
+export interface DiscountSlab {
+  id: string;
+  min_amount: number;
+  max_amount: number | null;
+  discount_pct: number;
+  is_active: boolean;
 }
 
 export interface OrderItem {
-  id: number;
+  id: string;
   order_id: string;
-  product_id: string;
-  sku: string;
+  product_id: string | null;
   product_name: string;
-  hsn_code: string;
-  unit: string;
-  qty: number;
+  quantity: number;
   unit_price: number;
-  gst_rate: number;
-  line_total: number;
-  gst_amount: number;
+  total_price: number;
 }
 
 export interface Order {
   id: string;
-  order_no: string;
-  buyer_id: string;
-  godown_id: string;
-  ship_to_state: string;
-  status: OrderStatus;
-  purchase_date: string;
-  due_date: string;
+  order_number: string;
+  user_id: string;
+  customer_type: Role;
   subtotal: number;
-  freight: number;
-  gst_amount: number;
-  base_amount: number;
-  early_discount_pct: number;
   discount_amount: number;
-  discount_override: boolean;
-  penalty_interest: number;
-  interest_waived: boolean;
-  amount_due: number;
-  amount_paid: number;
+  final_amount: number;
+  is_below_min_order: boolean;
+  order_status: OrderStatus;
+  payment_terms: PaymentTerms;
   payment_status: PaymentStatus;
-  paid_at: string | null;
-  settled_on: string | null;
-  settled_by: string | null;
-  settlement_ref: string | null;
-  notes: string | null;
-  is_locked_for_tally: boolean;
-  locked_at: string | null;
-  tally_synced: boolean;
-  tally_synced_at: string | null;
+  amount_paid: number;
+  due_date: string | null;
+  overdue_interest: number;
   created_at: string;
   order_items?: OrderItem[];
-  buyer?: Pick<Profile, 'business_name' | 'gstin' | 'state' | 'email'> | null;
+  buyer?: Pick<Profile, 'full_name' | 'entity_name' | 'mobile' | 'whatsapp' | 'email' | 'role' | 'state' | 'city'> | null;
 }
 
-export interface BuyerCredit {
+export interface PaymentLog {
+  id: string;
+  order_id: string;
   user_id: string;
-  credit_limit: number;
-  outstanding: number;
-  available: number;
-  overdue_orders: number;
-}
-
-export type AgingBucket = 'CURRENT' | '1-30' | '31-60' | '61-90' | '90+';
-
-export interface AgingRow extends Order {
-  business_name: string | null;
-  gstin: string | null;
-  buyer_state: string | null;
-  age_days: number;
-  days_past_due: number;
-  balance: number;
-  bucket: AgingBucket;
+  amount: number;
+  payment_mode: string | null;
+  reference_note: string | null;
+  recorded_at: string;
 }
 
 export interface ApiErrorBody {

@@ -53,28 +53,28 @@ export async function requireUser(req: Request): Promise<AuthContext> {
   const admin = serviceClient();
   const { data, error } = await admin.auth.getUser(token);
   if (error || !data.user) throw new HttpError(401, 'UNAUTHENTICATED', 'Session expired — please sign in again');
-  const { data: profile, error: pErr } = await admin.from('users').select('*').eq('id', data.user.id).single();
-  if (pErr || !profile) throw new HttpError(403, 'PROFILE_NOT_FOUND', 'No business profile linked to this login');
+  const { data: profile, error: pErr } = await admin.from('profiles').select('*').eq('id', data.user.id).single();
+  if (pErr || !profile) throw new HttpError(403, 'PROFILE_NOT_FOUND', 'No profile linked to this login');
   return { user: data.user, profile: profile as Profile, token, db: userClient(token), admin };
 }
 
-export type StaffArea = 'operations' | 'finance' | 'products' | 'stock' | 'kyc' | 'team';
+export type StaffArea = 'operations' | 'finance' | 'catalog' | 'customers' | 'team';
 
-/** Effective staff role: an admin without an explicit staff_role is a full manager. */
-export function staffRoleOf(profile: Profile): string | null {
-  return profile.role === 'admin' ? (profile.staff_role ?? 'manager') : null;
+/** Effective staff tier: an ADMIN without an explicit staff_tier is a full manager. */
+export function staffTierOf(profile: Profile): string | null {
+  return profile.role === 'ADMIN' ? (profile.staff_tier ?? 'manager') : null;
 }
 
 export function staffCan(profile: Profile, area: StaffArea): boolean {
-  switch (staffRoleOf(profile)) {
+  switch (staffTierOf(profile)) {
     case 'manager':
-      return true;
+      return true; // incl. customers & team
     case 'operations':
       return area === 'operations';
     case 'finance':
       return area === 'finance';
-    case 'stock':
-      return area === 'products' || area === 'stock';
+    case 'catalog':
+      return area === 'catalog';
     default:
       return false;
   }
@@ -82,7 +82,7 @@ export function staffCan(profile: Profile, area: StaffArea): boolean {
 
 export async function requireAdmin(req: Request): Promise<AuthContext> {
   const ctx = await requireUser(req);
-  if (ctx.profile.role !== 'admin') throw new HttpError(403, 'FORBIDDEN', 'Admin access required');
+  if (ctx.profile.role !== 'ADMIN') throw new HttpError(403, 'FORBIDDEN', 'Admin access required');
   return ctx;
 }
 
@@ -90,6 +90,14 @@ export async function requireAdmin(req: Request): Promise<AuthContext> {
 export async function requireArea(req: Request, area: StaffArea): Promise<AuthContext> {
   const ctx = await requireAdmin(req);
   if (!staffCan(ctx.profile, area)) throw new HttpError(403, 'FORBIDDEN', `Your role cannot access ${area}`);
+  return ctx;
+}
+
+/** Requires an APPROVED customer (DEALER or FARMER). */
+export async function requireApproved(req: Request): Promise<AuthContext> {
+  const ctx = await requireUser(req);
+  if (ctx.profile.role === 'ADMIN') throw new HttpError(403, 'ADMINS_CANNOT_ORDER', 'Admin accounts cannot place orders');
+  if (ctx.profile.status !== 'APPROVED') throw new HttpError(403, 'NOT_APPROVED', `Your account is ${ctx.profile.status}`);
   return ctx;
 }
 
@@ -105,27 +113,19 @@ export function safeEqual(a: string, b: string): boolean {
 // Maps `RAISE EXCEPTION 'CODE: message'` from PL/pgSQL to HTTP status codes.
 const DB_ERROR_STATUS: Record<string, number> = {
   UNAUTHENTICATED: 401,
-  KYC_NOT_APPROVED: 403,
-  ONLY_BUYERS_CAN_ORDER: 403,
+  FORBIDDEN: 403,
+  ADMINS_CANNOT_ORDER: 403,
+  NOT_APPROVED: 403,
   PROFILE_NOT_FOUND: 403,
-  NO_GODOWN_ASSIGNED: 409,
   INVALID_ITEMS: 400,
   INVALID_AMOUNT: 400,
   INVALID_TARGET: 400,
-  INVALID_DATE: 400,
-  SAME_GODOWN: 400,
-  PRODUCT_NOT_AVAILABLE: 422,
-  INSUFFICIENT_STOCK: 422,
-  MIN_ORDER_VALUE_NOT_MET: 422,
-  CREDIT_LIMIT_EXCEEDED: 422,
+  PRODUCT_UNAVAILABLE: 422,
+  PRICE_NOT_SET: 422,
+  MIN_ORDER_NOT_MET: 422,
   OVERPAYMENT: 422,
-  KYC_INCOMPLETE: 422,
   ORDER_NOT_FOUND: 404,
   USER_NOT_FOUND: 404,
-  INVALID_TRANSITION: 409,
-  NOT_LOCKABLE: 409,
-  TALLY_LOCKED: 409,
-  ORDER_ALREADY_PAID: 409,
 };
 
 export function mapDbError(err: { message: string; details?: string | null; code?: string }): HttpError {
