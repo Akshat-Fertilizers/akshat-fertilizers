@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Clock, LogIn, XCircle } from 'lucide-react';
 import { supabaseBrowser } from '@/lib/supabase';
+import { resolvePostLogin } from '@/lib/post-login';
+import { GoogleButton, OrDivider } from '@/components/auth/GoogleButton';
 import { Alert, Spinner } from '@/components/ui';
 
 export default function LoginPage() {
@@ -26,12 +28,11 @@ export default function LoginPage() {
       setBusy(false);
       return;
     }
-    const { data: profile } = await sb.from('profiles').select('role, status').eq('id', data.user.id).single();
-    if (profile?.role === 'ADMIN') return router.replace('/admin/dashboard');
-    if (profile?.status === 'APPROVED') return router.replace('/portal');
+    const { destination, blocked } = await resolvePostLogin(sb);
+    if (destination) return router.replace(destination);
     // Not approved — block portal access, keep them signed out of the portal.
     await sb.auth.signOut();
-    setBlocked(profile?.status === 'REJECTED' ? 'REJECTED' : 'PENDING');
+    setBlocked(blocked === 'REJECTED' ? 'REJECTED' : 'PENDING');
     setBusy(false);
   }
 
@@ -66,6 +67,8 @@ export default function LoginPage() {
         <input id="password" className="input" type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
       <button className="btn-primary w-full" disabled={busy}>{busy ? <Spinner /> : <LogIn className="h-4 w-4" />} Log in</button>
+      <OrDivider />
+      <GoogleButton label="Continue with Google" onError={setError} />
       <p className="text-center text-sm text-gray-500">
         New to Akshat? <Link className="font-bold text-brand-700 hover:underline" href="/register">Register as Dealer or Farmer</Link>
       </p>

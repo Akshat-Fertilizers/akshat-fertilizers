@@ -19,6 +19,7 @@ export interface Profile {
   city: string | null;
   entity_name: string | null; // Business Name (DEALER) or Farm Name (FARMER)
   custom_discount_pct: number | null;
+  onboarded: boolean; // false for a first-time Google sign-in until the profile is completed
   created_at: string;
 }
 

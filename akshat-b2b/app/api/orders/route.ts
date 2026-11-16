@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { HttpError, mapDbError, readJson, requireApproved, route } from '@/lib/supabase-server';
 import { UUID_RE } from '@/lib/utils';
+import { adminEmails, sendMail } from '@/lib/email';
+import { adminNewOrder, orderConfirmation } from '@/lib/email-templates';
+import type { Order } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -30,5 +33,16 @@ export const POST = route(async (req) => {
 
   const { data, error } = await ctx.db.rpc('create_order', { p_items: items, p_below_min: body.below_min === true });
   if (error) throw mapDbError(error);
-  return NextResponse.json({ order: data }, { status: 201 });
+
+  // Notifications (best-effort — never block order placement).
+  const order = data as Order;
+  const p = ctx.profile;
+  const customer = orderConfirmation(order, p.full_name);
+  const alert = adminNewOrder(order, { full_name: p.full_name, entity_name: p.entity_name, role: p.role });
+  await Promise.allSettled([
+    p.email ? sendMail({ to: p.email, subject: customer.subject, html: customer.html }) : Promise.resolve(false),
+    sendMail({ to: adminEmails(), subject: alert.subject, html: alert.html, replyTo: p.email ?? undefined }),
+  ]);
+
+  return NextResponse.json({ order }, { status: 201 });
 });

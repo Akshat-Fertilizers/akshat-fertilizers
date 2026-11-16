@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Building2, Sprout, UserPlus } from 'lucide-react';
 import { apiFetch } from '@/lib/api';
 import { INDIAN_STATES } from '@/lib/states';
+import { GoogleButton, OrDivider } from '@/components/auth/GoogleButton';
 import { Alert, Spinner } from '@/components/ui';
 
 type Role = 'DEALER' | 'FARMER';
@@ -91,6 +92,9 @@ function RegisterForm() {
         <div><label className="label">Password</label><input className="input" type="password" required autoComplete="new-password" value={form.password} onChange={set('password')} /></div>
       </div>
       <button className="btn-primary w-full" disabled={busy}>{busy ? <Spinner /> : <UserPlus className="h-4 w-4" />} Register as {role === 'DEALER' ? 'Dealer' : 'Farmer'}</button>
+      <OrDivider />
+      <GoogleButton label="Sign up with Google" onError={setError} />
+      <p className="text-center text-xs text-gray-400">With Google, you’ll pick Dealer or Farmer and add a few details on the next step.</p>
       <p className="text-center text-sm text-gray-500">Already registered? <Link className="font-bold text-brand-700 hover:underline" href="/login">Log in</Link></p>
     </form>
   );

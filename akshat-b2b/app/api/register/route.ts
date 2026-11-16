@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { HttpError, readJson, route, serviceClient } from '@/lib/supabase-server';
+import { adminEmails, sendMail } from '@/lib/email';
+import { adminNewRegistration, registrationReceived } from '@/lib/email-templates';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -55,5 +57,14 @@ export const POST = route(async (req) => {
     const dup = /already|registered|exists/i.test(error.message);
     throw new HttpError(dup ? 409 : 400, dup ? 'EMAIL_TAKEN' : 'REGISTER_FAILED', dup ? 'This email is already registered — please log in.' : error.message);
   }
+
+  // Notifications (best-effort — never block the registration response).
+  const customer = registrationReceived(full_name, role);
+  const alert = adminNewRegistration({ full_name, role, email, mobile, entity_name, state: meta.state, city: meta.city });
+  await Promise.allSettled([
+    sendMail({ to: email, subject: customer.subject, html: customer.html }),
+    sendMail({ to: adminEmails(), subject: alert.subject, html: alert.html, replyTo: email }),
+  ]);
+
   return NextResponse.json({ ok: true, role }, { status: 201 });
 });
